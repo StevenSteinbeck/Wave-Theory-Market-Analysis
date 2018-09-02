@@ -9,3 +9,7 @@ Does a full spectrum search:
   - this allows the specified wave theory to be analyzed both short term and long term. It will find every intance of the pattern.
 
 Output is basic for now, working on algorithms atm
+
+BETA:
+  - Will search for a motive impulse wave pattern in any csv with open and close values, at any interval
+  - Will provide feedback of a range of row #'s where the match can be found in the entered CSV
