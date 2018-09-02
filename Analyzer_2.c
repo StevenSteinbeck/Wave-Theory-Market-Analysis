@@ -2,7 +2,7 @@
 	IN COLLABORATION WITH: ... */
 
 // Current goal: get analysis to properly identify past motive waves
-// Once proper, implement live stream of data and live updating of the wave beased on input
+// Once proper, implement live stream of data and live updating/prediction of the live wave beased on input
 // Then include an automated tradng bot based on confidence levels of current position in motive wave
 
 #include <stdio.h>
@@ -276,7 +276,7 @@ void	motive_impulse_engine(char **calc_data)
 	// (2) output data needs to be more readable / analytic
 	// (3) add support for imperfect matches and ouput a confidence level in a match instead
 
-	// this loop changes the search interval so it will find every match possible over a long period of time
+	// this loop changes the search interval so it will find every match possible over a short and eventually long period of time
 	while (interval < 1000)
 	{
 		row = 0;
@@ -286,20 +286,26 @@ void	motive_impulse_engine(char **calc_data)
 			row_start = row;	
 			val_0 = get_base_val(calc_data, &row);
 			val_1 = get_next_val(calc_data, &row, interval);
+			wave_1 = val_1 - val_0;
 			if (val_0 < val_1)
 			{
+				wave_2 = val_1 - val_2;
 				val_2 = get_next_val(calc_data, &row, interval);
 				if (val_2 < val_1 && val_2 > val_0)
 				{
 					val_3 = get_next_val(calc_data, &row, interval);
+					wave_3 = val_3 - val_2;
 					if (val_3 > val_2 && val_3 > val_1)
 					{
 						val_4 = get_next_val(calc_data, &row, interval);
+						wave_4 = val_3 - val_4;
 						if (val_4 < val_3 && val_4 > val_1)
 						{
 							val_5 = get_next_val(calc_data, &row, interval);
+							wave_5 = val_5 - val_4;
 							row_end = row;
-							if (val_5 > val_4)
+							if (val_5 > val_4 && (wave_3 > wave_1 || wave_3 > wave_2 || wave_3 > wave_4
+								|| wave_3 > wave_5))
 							{
 								// perfect motive impulse wave match if gets here
 								// store these values for graphing later
@@ -313,7 +319,6 @@ void	motive_impulse_engine(char **calc_data)
 			row++;
 		}
 		interval++;
-		}
 	}
 }
 
