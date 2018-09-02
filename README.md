@@ -6,7 +6,7 @@ Currently takes input from a CSV file:
  
 Does a full spectrum search:
   - computes using the smallest available interval, then recomputes with an increment to the interaval, until the interval is too large for the dataset
-  - this allows the specified wave theory to be analyzed both short term and long term. It will find every intance of the pattern.
+  - this allows the specified wave theory to be analyzed both short term and long term. It will find every intance of the pattern
 
 Output is basic for now, working on algorithms atm
 
