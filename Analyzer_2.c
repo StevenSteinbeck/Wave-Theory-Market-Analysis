@@ -275,9 +275,12 @@ void	motive_impulse_engine(char **calc_data)
 	// (1) add date/time output printing instead of row #'s
 	// (2) output data needs to be more readable / analytic
 	// (3) add support for imperfect matches and ouput a confidence level in a match instead
+
+	// this loop changes the search interval so it will find every match possible over a long period of time
 	while (interval < 1000)
 	{
 		row = 0;
+		// this loop searches through every price (start to end) with each time interval, starting with 1 hour intervals
 		while (calc_data[row])
 		{
 			row_start = row;	
@@ -298,7 +301,8 @@ void	motive_impulse_engine(char **calc_data)
 							row_end = row;
 							if (val_5 > val_4)
 							{
-								//perfect motive impulse wave match if gets here
+								// perfect motive impulse wave match if gets here
+								// store these values for graphing later
 								printf("Motive Impulse Wave Detected From: Row %i to Row %i\n", row_start, row_end);
 								printf("Interval Size in Hours: %i\n", interval);
 							}
