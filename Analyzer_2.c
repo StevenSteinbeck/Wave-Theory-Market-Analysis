@@ -354,20 +354,19 @@ int	main(void)
 
 	// For testing initial 2d data structure
 
-	/* while (data_array[row])
+	/*while (data_array[row])
 	{
 		printf("%s", data_array[row]);
 		row++;
-	} */
+	}*/
 
 	// Tests if index struct is filling properly
-	
-	/* printf("date: %d\n", index.date);
+	/*	
+	printf("date: %d\n", index.date);
 	printf("open: %d\n", index.open);
 	printf("high: %d\n", index.high);
 	printf("low: %d\n", index.low);
 	printf("close: %d\n", index.close);
-	printf("volume: %d\n", index.volume);
-	patterns = pattern_seeker(data_array); */
+	printf("volume: %d\n", index.volume);*/
 	
 }	
