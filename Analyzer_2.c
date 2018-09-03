@@ -24,6 +24,7 @@ typedef	struct	s_index
 	int	volume;
 }		t_index;
 
+// gathers data from CSV file
 // eventually replace with live data stream
 char	*getdata(void)
 {
@@ -47,6 +48,7 @@ char	*getdata(void)
 	return (buffer);		
 }
 
+// converts initial string read from CSV file to a more searchable 2D array
 char	**oned_twod(char *data, char **data_array)
 {
 	int i = 0;
@@ -135,9 +137,9 @@ void	ft_strclr(char *s)
 	}
 }
 
+// gets hourly open/close values and associated timestamp
 char	**the_gatherer(char **data_array, t_index *index)
 {
-	// gets hourly open/close values and associated timestamp
 	int row = 1;
 	int x = 0;
 	int open_pos;
@@ -219,7 +221,7 @@ double	get_base_val(char **calc_data, int *row)
 	double	base = 0;
 
 	base_val = (char *)malloc(sizeof(char) * 20);
-	if (calc_data[*row][1] == '/')
+	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/')
 		(*row)++;
 	while (calc_data[*row][i])
 	{
@@ -242,7 +244,7 @@ double	get_next_val(char **calc_data, int *row, int interval)
 		*row = *row + interval;
 	row_cpy = *row;
 	val = (char *)malloc(sizeof(char) * 20);
-	if (calc_data[*row][1] == '/')
+	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/')
 		(*row)++;
 	while (calc_data[*row][i])
 	{
@@ -254,7 +256,89 @@ double	get_next_val(char **calc_data, int *row, int interval)
 	return (val1);
 }
 
-void	motive_impulse_engine(char **calc_data)
+char	*date_getter(char **calc_data, int row)
+{
+	int	i = 0;
+	int	x = 0;
+	char	*date;
+	
+	date = (char *)malloc(sizeof(char) * 30);
+	if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+	{
+		while (calc_data[row][i])
+		{
+			date[i] = calc_data[row][i];
+			i++;
+		}
+		return (date);
+	}
+	--row;
+	if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+	{
+		while (calc_data[row][i])
+		{
+			date[i] = calc_data[row][i];
+			i++;
+		}
+		return (date);
+	}
+	row = row + 2;
+	//trouble with incrementation making the '/' check, causing seg fault, rehtink
+	if (calc_data[row] == NULL)
+		x++;
+	if (x == 0)
+	{	
+		if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+		{
+			while (calc_data[row][i])
+			{
+				date[i] = calc_data[row][i];
+				i++;
+			}
+			return (date);	
+			
+		}
+	}
+	return ("poop");
+}
+
+void	itoa_isnegative(int *n, int *negative)
+{
+	if (*n < 0)
+	{
+		*n *= -1;
+		*negative = 1;
+	}
+}
+
+char	*ft_itoa(int n)
+{
+	int		tmpn;
+	int		len;
+	int		negative;
+	char	*str;
+
+	tmpn = n;
+	len = 2;
+	negative = 0;
+	itoa_isnegative(&n, &negative);
+	while (tmpn /= 10)
+		len++;
+	len += negative;
+	if ((str = (char*)malloc(sizeof(char) * len)) == NULL)
+		return (NULL);
+	str[--len] = '\0';
+	while (len--)
+	{
+		str[len] = n % 10 + '0';
+		n = n / 10;
+	}
+	if (negative)
+		str[0] = '-';
+	return (str);
+}
+
+char	**motive_impulse_engine(char **calc_data)
 {
 	int 	row_start = 0;
 	int 	row_end = 0;
@@ -271,6 +355,17 @@ void	motive_impulse_engine(char **calc_data)
 	double	wave_3;
 	double	wave_4;
 	double	wave_5;
+	char	**matches;
+	int	col = 0;
+	int	x = 0;
+	char	*date;
+	char	*date_1;
+	char	*date_2;
+	char	*date_3;
+	char	*date_4;
+	char	*date_5;
+
+	matches = (char **)malloc(sizeof(char *) * 12000);
 	
 	// (1) add date/time output printing instead of row #'s
 	// (2) output data needs to be more readable / analytic
@@ -283,34 +378,70 @@ void	motive_impulse_engine(char **calc_data)
 		// this loop searches through every price (start to end) with each time interval, starting with 1 hour intervals
 		while (calc_data[row])
 		{
+			date = date_getter(calc_data, row);	
 			row_start = row;	
 			val_0 = get_base_val(calc_data, &row);
 			val_1 = get_next_val(calc_data, &row, interval);
 			wave_1 = val_1 - val_0;
 			if (val_0 < val_1)
 			{
+				date_1 = date_getter(calc_data, row);
 				wave_2 = val_1 - val_2;
 				val_2 = get_next_val(calc_data, &row, interval);
 				if (val_2 < val_1 && val_2 > val_0)
 				{
+					date_2 = date_getter(calc_data, row);
 					val_3 = get_next_val(calc_data, &row, interval);
 					wave_3 = val_3 - val_2;
 					if (val_3 > val_2 && val_3 > val_1)
 					{
+						date_3 = date_getter(calc_data, row);
 						val_4 = get_next_val(calc_data, &row, interval);
 						wave_4 = val_3 - val_4;
 						if (val_4 < val_3 && val_4 > val_1)
 						{
+							date_4 = date_getter(calc_data, row);
 							val_5 = get_next_val(calc_data, &row, interval);
+							date_5 = date_getter(calc_data, row);
 							wave_5 = val_5 - val_4;
 							row_end = row;
 							if (val_5 > val_4 && (wave_3 > wave_1 || wave_3 > wave_2 || wave_3 > wave_4
 								|| wave_3 > wave_5))
 							{
-								// perfect motive impulse wave match if gets here
+								// perfect motive impulse wave match if we get here
 								// store these values for graphing later
-								printf("Motive Impulse Wave Detected From: Row %i to Row %i\n", row_start, row_end);
-								printf("Interval Size in Hours: %i\n", interval);
+								matches[col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = ft_itoa(interval);	
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_0, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date_1;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_1, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date_2;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_2, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date_3;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_3, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date_4;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_4, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = date_5;
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								gcvt(val_5, 7, matches[col]);
+								matches[++col] = (char *)malloc(sizeof(char) * 30);
+								matches[col] = "----------";
+								col++;
+								/*printf("Motive Impulse Wave Detected From: Row %i %6.2f to Row %i %6.2f\n", 
+									row_start, val_0, row_end, val_5);
+								printf("Interval Size in Hours: %i\n", interval);*/
 							}
 						}
 					}
@@ -320,6 +451,7 @@ void	motive_impulse_engine(char **calc_data)
 		}
 		interval++;
 	}
+	return (matches);
 }
 
 
@@ -328,12 +460,22 @@ void	motive_impulse_engine(char **calc_data)
 char	**pattern_detector(char **data_array, t_index *index)
 {
 	char	**calc_data;
+	char	**matches;
 	int i = 0;
 	char *copy;
 	
 	
 	calc_data = the_gatherer(data_array, index);
-	motive_impulse_engine(calc_data);
+	matches = motive_impulse_engine(calc_data);
+	if (matches[i] != 0)
+		printf("%s\n", "MOTIVE IMPULSE WAVE DETECTED");
+	while (matches[i])
+	{
+		copy = matches[i];
+		printf("%s\n", matches[i]);
+		i++;
+	}
+		
 	return (data_array);
 }		
 
@@ -352,7 +494,7 @@ int	main(void)
 	patterns = pattern_detector(data_array, &index);	
 	
 
-	// For testing initial 2d data structure
+	// Tests if captured 2d data structure properly
 
 	/*while (data_array[row])
 	{
