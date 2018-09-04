@@ -273,7 +273,7 @@ char	*date_getter(char **calc_data, int row)
 		return (date);
 	}
 	--row;
-	if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+	if (calc_data[row] != 0 && (calc_data[row][1] == '/' || calc_data[row][2] == '/'))
 	{
 		while (calc_data[row][i])
 		{
@@ -452,8 +452,7 @@ char	**motive_impulse_engine(char **calc_data)
 		interval++;
 	}
 	return (matches);
-}
-
+}	
 
 // control funciton for detecting patterns in data
 // need to add support for other types of detectable waves in future	
@@ -467,6 +466,7 @@ char	**pattern_detector(char **data_array, t_index *index)
 	
 	calc_data = the_gatherer(data_array, index);
 	matches = motive_impulse_engine(calc_data);
+	//match_prices = get_prices(matches);
 	if (matches[i] != 0)
 		printf("%s\n", "MOTIVE IMPULSE WAVE DETECTED");
 	while (matches[i])
@@ -474,8 +474,7 @@ char	**pattern_detector(char **data_array, t_index *index)
 		copy = matches[i];
 		printf("%s\n", matches[i]);
 		i++;
-	}
-		
+	}	
 	return (data_array);
 }		
 
