@@ -1,7 +1,7 @@
 /* CREATED BY STESTEIN, the infamous harass'her
 	IN COLLABORATION WITH: ... */
 
-// Current goal: get analysis to properly identify past motive waves
+// Current goal: get analysis to properly identify past motive waves (done!)
 // Once proper, implement live stream of data and live updating/prediction of the live wave beased on input
 // Then include an automated tradng bot based on confidence levels of current position in motive wave
 
@@ -283,7 +283,6 @@ char	*date_getter(char **calc_data, int row)
 		return (date);
 	}
 	row = row + 2;
-	//trouble with incrementation making the '/' check, causing seg fault, rehtink
 	if (calc_data[row] == NULL)
 		x++;
 	if (x == 0)
@@ -366,16 +365,16 @@ char	**motive_impulse_engine(char **calc_data)
 	char	*date_5;
 
 	matches = (char **)malloc(sizeof(char *) * 12000);
-	
-	// (1) add date/time output printing instead of row #'s
-	// (2) output data needs to be more readable / analytic
+	matches[0] = 0;
+	// (1) add date/time output printing instead of row #'s (done!)
+	// (2) output data needs to be more readable / analytic (done!)
 	// (3) add support for imperfect matches and ouput a confidence level in a match instead
 
 	// this loop changes the search interval so it will find every match possible over a short and eventually long period of time
 	while (interval < 1000)
 	{
 		row = 0;
-		// this loop searches through every price (start to end) with each time interval, starting with 1 hour intervals
+		// this loop searches through every price to find matches(start to end), at each time interval, starting with 1 hour
 		while (calc_data[row])
 		{
 			date = date_getter(calc_data, row);	
@@ -466,7 +465,6 @@ char	**pattern_detector(char **data_array, t_index *index)
 	
 	calc_data = the_gatherer(data_array, index);
 	matches = motive_impulse_engine(calc_data);
-	//match_prices = get_prices(matches);
 	if (matches[i] != 0)
 		printf("%s\n", "MOTIVE IMPULSE WAVE DETECTED");
 	while (matches[i])
@@ -475,7 +473,7 @@ char	**pattern_detector(char **data_array, t_index *index)
 		printf("%s\n", matches[i]);
 		i++;
 	}	
-	return (data_array);
+	return (matches);
 }		
 
 int	main(void)
@@ -490,7 +488,10 @@ int	main(void)
 	data = getdata();
 	data_array = oned_twod(data, data_array);
 	index_setup(data_array, &index);
-	patterns = pattern_detector(data_array, &index);	
+	patterns = pattern_detector(data_array, &index);
+	if (patterns[x] == 0)
+		printf("NO MATCH FOUND\n");
+	return (0);	
 	
 
 	// Tests if captured 2d data structure properly
