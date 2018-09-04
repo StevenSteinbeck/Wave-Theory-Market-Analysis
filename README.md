@@ -12,4 +12,4 @@ Output is basic for now, working on algorithms atm
 
 BETA:
   - Will search for a motive impulse wave pattern in any csv with open and close values, at any interval
-  - Will provide feedback of a range of row #'s where the match can be found in the entered CSV
+  - Will output the interval and the price/date/time data for the matched data points
