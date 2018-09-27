@@ -233,7 +233,7 @@ double	get_base_val(char **calc_data, int *row)
 	double	base = 0;
 
 	base_val = (char *)malloc(sizeof(char) * 20);
-	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/')
+	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/' || calc_data[*row][4] == '-')
 		(*row)++;
 	while (calc_data[*row][i])
 	{
@@ -256,7 +256,7 @@ double	get_next_val(char **calc_data, int *row, int interval)
 		*row = *row + interval;
 	row_cpy = *row;
 	val = (char *)malloc(sizeof(char) * 20);
-	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/')
+	if (calc_data[*row][1] == '/' || calc_data[*row][2] == '/' || calc_data[*row][4] == '-')
 		(*row)++;
 	while (calc_data[*row][i])
 	{
@@ -506,7 +506,7 @@ int	main(void)
 	char api_query[] = "alpha-vantage-cli --type=intraday --symbol=#### --api-key=EYA3BSOXJBJ12I76 --out=####.csv";
 	printf("Enter ticker symbol: ");
 	scanf("%10s", ticker);
-	printf("Entered ticker: %s\n", ticker);
+	printf("Finding patterns for ticker: %s\n", ticker);
 	while (api_query[i])
 	{
 		if (api_query[i] == '#' && api_query[i + 1] == '#')
@@ -534,6 +534,7 @@ int	main(void)
 		patterns = pattern_detector(data_array, &index);
 		if (patterns[x] == 0)
 			printf("NO MATCH FOUND\n");
+		printf("Downloading next update...\n");
 		sleep(10);
 	}	
 	return (0);	
