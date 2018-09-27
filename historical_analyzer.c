@@ -33,7 +33,7 @@ char	*getdata(void)
 	char *str;
 	char *name;
 	int i;
-	FILE * f = fopen ("BTC_DATA.csv", "r");
+	FILE * f = fopen ("BBY.csv", "r");
 	
 	if (f)
 	{
