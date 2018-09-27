@@ -275,7 +275,7 @@ char	*date_getter(char **calc_data, int row)
 	char	*date;
 	
 	date = (char *)malloc(sizeof(char) * 30);
-	if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+	if (calc_data[row][1] == '/' || calc_data[row][2] == '/' || calc_data[row][4] == '-')
 	{
 		while (calc_data[row][i])
 		{
@@ -285,7 +285,7 @@ char	*date_getter(char **calc_data, int row)
 		return (date);
 	}
 	--row;
-	if (calc_data[row] != 0 && (calc_data[row][1] == '/' || calc_data[row][2] == '/'))
+	if (calc_data[row] != 0 && (calc_data[row][1] == '/' || calc_data[row][2] == '/' || calc_data[row][4] == '-'))
 	{
 		while (calc_data[row][i])
 		{
@@ -299,7 +299,7 @@ char	*date_getter(char **calc_data, int row)
 		x++;
 	if (x == 0)
 	{	
-		if (calc_data[row][1] == '/' || calc_data[row][2] == '/')
+		if (calc_data[row][1] == '/' || calc_data[row][2] == '/' || calc_data[row][4] == '-')
 		{
 			while (calc_data[row][i])
 			{
@@ -385,7 +385,7 @@ char	**motive_impulse_engine(char **calc_data)
 	// this loop changes the search interval so it will find every match possible over a short and eventually long period of time
 	while (interval < 1000)
 	{
-		row = 0;
+		row = 1;
 		// this loop searches through every price to find matches(start to end), at each time interval, starting with 1 hour
 		while (calc_data[row])
 		{
@@ -503,13 +503,13 @@ int	main(void)
 	char	*ticker = 0;
 
 	ticker = (char *)malloc(sizeof(char) * 11);
-	char api_query[] = "alpha-vantage-cli --type=intraday --symbol=TI --api-key=EYA3BSOXJBJ12I76 --out=TI.csv";
+	char api_query[] = "alpha-vantage-cli --type=intraday --symbol=#### --api-key=EYA3BSOXJBJ12I76 --out=####.csv";
 	printf("Enter ticker symbol: ");
 	scanf("%10s", ticker);
 	printf("Entered ticker: %s\n", ticker);
 	while (api_query[i])
 	{
-		if (api_query[i] == 'T' && api_query[i + 1] == 'I')
+		if (api_query[i] == '#' && api_query[i + 1] == '#')
 		{
 			l = 0;
 			while (ticker[l])
@@ -518,6 +518,10 @@ int	main(void)
 				l++;
 				i++;
 			}
+			while (api_query[i] == '#')
+			{
+				memmove(&api_query[i], &api_query[i + 1], strlen(api_query) - i);
+			}	
 		}
 		i++;
 	}
