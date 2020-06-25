@@ -1,4 +1,4 @@
-/* CREATED BY STESTEIN, the infamous harass'her
+/* CREATED BY STESTEIN,
 	IN COLLABORATION WITH: ... */
 
 // Current goal: get analysis to properly identify past motive waves (done!)
