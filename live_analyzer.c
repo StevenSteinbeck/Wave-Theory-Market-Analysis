@@ -503,7 +503,7 @@ int	main(void)
 	char	*ticker = 0;
 
 	ticker = (char *)malloc(sizeof(char) * 11);
-	char api_query[] = "alpha-vantage-cli --type=intraday --symbol=#### --api-key=EYA3BSOXJBJ12I76 --out=####.csv";
+	char api_query[] = "alpha-vantage-cli --type=intraday --symbol=#### --api-key=YOUR_KEY_HERE --out=####.csv";
 	printf("Enter ticker symbol: ");
 	scanf("%10s", ticker);
 	printf("Finding patterns for ticker: %s\n", ticker);
